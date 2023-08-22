@@ -28,8 +28,17 @@ import {
   Input,
   Link,
   Switch,
+  RadioGroup,
+  Radio,
+  HStack,
   Text,
   DarkMode,
+  Slider,
+  SliderTrack,
+  SliderFilledTrack,
+  SliderThumb,
+  SliderMark,
+  Divider
 } from "@chakra-ui/react";
 
 // Assets
@@ -38,13 +47,59 @@ import signInImage from "assets/img/signInImage.png";
 // Custom Components
 import AuthFooter from "components/Footer/AuthFooter";
 import GradientBorder from "components/GradientBorder/GradientBorder";
+import WaveformAudioPlayer from "components/WaveformAudio/WaveformAudioPlayer.js";
+
+import {  Icon } from "@chakra-ui/react";
+import { FaStar, FaRegStar } from "react-icons/fa";
+
+const RatingInput = ({ range, value, onChange }) => {
+  return (
+    <Box display="flex" justifyContent="center">
+      {Array.from({ length: range }, (_, i) => i + 1).map((rating) => (
+        <Button
+          key={rating}
+          variant="unstyled"
+          onClick={() => onChange(rating)}
+          _hover={{ bg: "transparent" }}
+        >
+          <Icon color={'yellow.200'} as={value >= rating ? FaStar : FaRegStar} />
+        </Button>
+      ))}
+    </Box>
+  );
+};
+
+const elements = [
+  {type:"scale", id:"rating", label:"How would you rate the above song?", options:['Happy','Sad']},
+  {type:"radio", id:"valence", label:"Is the above song Happy or Sad?", options:['Happy','Sad']},
+  {type:"radio", id:"arousal", label:"Is the above song Energetic or Slow?", options:['Energetic','Slow']},
+  {type:"radio", id:"theme", label:"Do you think the clip had a general theme or did it seem random?", options:['Random','Themed']},
+]
+
+const audioUrl = "https://audio-files-170823.s3.amazonaws.com/NA4/CR01.mp3?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIASMOAX6HUJBI63YQL%2F20230820%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20230820T215126Z&X-Amz-Expires=300&X-Amz-Signature=590c439fc3553596081117262e78d484ae4a4a72099e6ac2b96c048953aa6482&X-Amz-SignedHeaders=host"
+
 
 function SignIn() {
+
+  const [values, setValues] = React.useState({})
+  const [rating, setRating] = React.useState(0);
+
+  const handleSave = ({target}) => {
+    setValues({
+      [target.id]: target.value
+    })
+  }
+  const handleChange = (id) => (value) => {
+    setValues({
+      [id]: value
+    })
+  }
+
   const titleColor = "white";
   const textColor = "gray.400";
 
   return (
-    <Flex position='relative'>
+    <Flex position='center'>
       <Flex
         minH='100vh'
         h={{ base: "120vh", lg: "fit-content" }}
@@ -53,7 +108,7 @@ function SignIn() {
         mx='auto'
         pt={{ sm: "100px", md: "0px" }}
         flexDirection='column'
-        me={{ base: "auto", lg: "50px", xl: "auto" }}>
+        me={{ base: "auto", lg: "auto", xl: "auto" }}>
         <Flex
           alignItems='center'
           justifyContent='start'
@@ -61,166 +116,105 @@ function SignIn() {
           mx={{ base: "auto", lg: "unset" }}
           ms={{ base: "auto", lg: "auto" }}
           w={{ base: "100%", md: "50%", lg: "450px" }}
-          px='50px'>
+          px='50px'
+          >
           <Flex
             direction='column'
             w='100%'
             background='transparent'
             mt={{ base: "50px", md: "150px", lg: "160px", xl: "245px" }}
-            mb={{ base: "60px", lg: "95px" }}>
-            <Heading color={titleColor} fontSize='32px' mb='10px'>
+            mb={{ base: "60px", lg: "95px" }}
+            >
+
+            {/* <Heading color={titleColor} fontSize='32px' mb='10px'>
               Nice to see you!
-            </Heading>
+            </Heading> */}
             <Text
               mb='36px'
               ms='4px'
               color={textColor}
               fontWeight='bold'
               fontSize='14px'>
-              Enter your email and password to sign in
+              Play the clip!
             </Text>
-            <FormControl>
+
+            <WaveformAudioPlayer audioUrl={audioUrl} />
+
+            {/* <AudioPlayer /> */}
+
+            <Divider padding='5px' paddingTop='40px'/>
+
+      
+            {elements.filter(e => e.type == 'scale').map( (element) => <> <FormControl padding="15px">
               <FormLabel
+                ms='4px'
+                paddingBottom="10px"
+                fontSize='sm'
+                fontWeight='normal'
+                color='white'>
+                {element.label}
+              </FormLabel>
+
+              <RatingInput value={rating} range={7} onChange={(newRating) => setRating(newRating)} />
+
+            </FormControl>
+            <Divider padding='5px'/>
+            </>)}
+
+
+            {elements.filter(e => e.type == 'radio').map( (element) => <> <FormControl padding="15px">
+              <FormLabel
+                ms='4px'
+                fontSize='sm'
+                paddingBottom="10px"
+                fontWeight='normal'
+                color='white'>
+                {element.label}
+              </FormLabel>
+
+              {/* <GradientBorder
+                // mb='24px'
+                // w={{ base: "100%", lg: "fit-content" }}
+                // borderRadius='20px'
+                > */}
+                  
+                  <RadioGroup onChange={handleChange(element.id)} id={element.id} value={values[element.id]} defaultValue="">
+                  <HStack spacing="50px">
+                  {element.options.map(o => <Radio value={o}>              <FormLabel
                 ms='4px'
                 fontSize='sm'
                 fontWeight='normal'
                 color='white'>
-                Email
-              </FormLabel>
-              <GradientBorder
-                mb='24px'
-                w={{ base: "100%", lg: "fit-content" }}
-                borderRadius='20px'>
-                <Input
-                  color='white'
-                  bg='rgb(19,21,54)'
-                  border='transparent'
-                  borderRadius='20px'
-                  fontSize='sm'
-                  size='lg'
-                  w={{ base: "100%", md: "346px" }}
-                  maxW='100%'
-                  h='46px'
-                  placeholder='Your email adress'
-                />
-              </GradientBorder>
+                {o}
+              </FormLabel></Radio>)}
+                  </HStack>
+                </RadioGroup>
+              {/* </GradientBorder> */}
             </FormControl>
-            <FormControl>
-              <FormLabel
-                ms='4px'
-                fontSize='sm'
-                fontWeight='normal'
-                color='white'>
-                Password
-              </FormLabel>
-              <GradientBorder
-                mb='24px'
-                w={{ base: "100%", lg: "fit-content" }}
-                borderRadius='20px'>
-                <Input
-                  color='white'
-                  bg='rgb(19,21,54)'
-                  border='transparent'
-                  borderRadius='20px'
-                  fontSize='sm'
-                  size='lg'
-                  w={{ base: "100%", md: "346px" }}
-                  maxW='100%'
-                  type='password'
-                  placeholder='Your password'
-                />
-              </GradientBorder>
-            </FormControl>
-            <FormControl display='flex' alignItems='center'>
-              <DarkMode>
-                <Switch id='remember-login' colorScheme='brand' me='10px' />
-              </DarkMode>
-              <FormLabel
-                htmlFor='remember-login'
-                mb='0'
-                ms='1'
-                fontWeight='normal'
-                color='white'>
-                Remember me
-              </FormLabel>
-            </FormControl>
+            <Divider padding='5px'/>
+            </>
+            )}
+
+
             <Button
+              // paddingTop="10px"
               variant='brand'
-              fontSize='10px'
-              type='submit'
+              fontSize='15px'
+              onClick={handleSave}
+              // type='submit'
               w='100%'
               maxW='350px'
               h='45'
               mb='20px'
               mt='20px'>
-              SIGN IN
+              SAVE
             </Button>
 
-            <Flex
-              flexDirection='column'
-              justifyContent='center'
-              alignItems='center'
-              maxW='100%'
-              mt='0px'>
-              <Text color={textColor} fontWeight='medium'>
-                Don't have an account?
-                <Link color={titleColor} as='span' ms='5px' fontWeight='bold'>
-                  Sign Up
-                </Link>
-              </Text>
-            </Flex>
+
           </Flex>
         </Flex>
-        <Box
-          w={{ base: "335px", md: "450px" }}
-          mx={{ base: "auto", lg: "unset" }}
-          ms={{ base: "auto", lg: "auto" }}
-          mb='80px'>
-          <AuthFooter />
-        </Box>
-        <Box
-          display={{ base: "none", lg: "block" }}
-          overflowX='hidden'
-          h='100%'
-          maxW={{ md: "50vw", lg: "50vw" }}
-          minH='100vh'
-          w='960px'
-          position='absolute'
-          left='0px'>
-          <Box
-            bgImage={signInImage}
-            w='100%'
-            h='100%'
-            bgSize='cover'
-            bgPosition='50%'
-            position='absolute'
-            display='flex'
-            flexDirection='column'
-            justifyContent='center'
-            alignItems='center'
-            position='absolute'>
-            <Text
-              textAlign='center'
-              color='white'
-              letterSpacing='8px'
-              fontSize='20px'
-              fontWeight='500'>
-              INSPIRED BY THE FUTURE:
-            </Text>
-            <Text
-              textAlign='center'
-              color='transparent'
-              letterSpacing='8px'
-              fontSize='36px'
-              fontWeight='bold'
-              bgClip='text !important'
-              bg='linear-gradient(94.56deg, #FFFFFF 79.99%, #21242F 102.65%)'>
-              THE VISION UI DASHBOARD
-            </Text>
-          </Box>
-        </Box>
       </Flex>
-    </Flex>
+   </Flex>
   );
 }
 

@@ -408,7 +408,7 @@ export function SidebarResponsive(props) {
   //  Chakra Color Mode
   var brand = (
     <Box pt={"35px"} mb='8px'>
-      <Link
+      {/* <Link
         href={`${process.env.PUBLIC_URL}/#/`}
         target='_blank'
         display='flex'
@@ -417,16 +417,16 @@ export function SidebarResponsive(props) {
         fontWeight='bold'
         justifyContent='center'
         alignItems='center'
-        fontSize='11px'>
-        <SimmmpleLogoWhite w='22px' h='22px' me='10px' mt='2px' />
+        fontSize='11px'> */}
+        {/* <SimmmpleLogoWhite w='22px' h='22px' me='10px' mt='2px' /> */}
         <Box
           bg='linear-gradient(97.89deg, #FFFFFF 70.67%, rgba(117, 122, 140, 0) 108.55%)'
           bgClip='text'>
-          <Text fontSize='sm' letterSpacing='3px' mt='3px' color='transparent'>
+          <Text fontSize='lg' letterSpacing='3px' mt='3px' color='transparent'>
             {logoText}
           </Text>
         </Box>
-      </Link>
+      {/* </Link> */}
       <Separator></Separator>
     </Box>
   );

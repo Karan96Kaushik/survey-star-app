@@ -1,0 +1,71 @@
+/* WaveformAudioPlayer.css */
+.waveform-container {
+  position: relative;
+  max-width: auto;
+  max-height: 100px;
+  margin: 0;
+  padding: 20px;
+  padding-bottom: 100px;
+  background-color: #181818; /* Dark background color */
+  color: #FFFFFF; /* Light text color for contrast */
+  border-radius: 8px; /* Optional: for rounded corners */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Optional: for a slight shadow */
+  /* padding-bottom: 70px; */
+}
+
+#waveform {
+  height: auto;
+}
+
+.play-pause-button {
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  background-color: #282828;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 50%;
+  outline: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  position: absolute;
+  top: 90%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  /* Adjust the position as needed. This places the button below the waveform. */
+  /* margin-top: 70px; */
+
+  display: flex;
+  align-items: center; /* vertically center the child elements (icon) */
+  justify-content: center; /* horizontally center the child elements (icon) */
+}
+
+/* .play-pause-icon {
+  width: 40px;
+  height: 40px;
+} */
+
+.play-pause-button:hover {
+  background-color: #383838;
+}
+
+/* Media queries for more responsive behavior */
+@media (max-width: 640px) {
+  .play-pause-button {
+    width: 80px;
+    height: 80px;
+    fontSize: 18px;
+    bottom: -50px;
+  }
+}
+
+@media (max-width: 480px) {
+  .play-pause-button {
+    width: 60px;
+    height: 60px;
+    fontSize: 16px;
+    bottom: -40px;
+  }
+}
