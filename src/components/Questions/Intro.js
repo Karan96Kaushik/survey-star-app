@@ -43,34 +43,7 @@ const Name = ({values, handleChange, audioString}) => {
             fontSize='14px'>
             Thank you for your participation!            
     </Text>
-        
-    <Text
-            mb='4px'
-            ms='4px'
-            color={textColor}
-            fontWeight='bold'
-            fontSize='14px'>
-            Note:          
-    </Text>
-        
-        <Text
-                mb='4px'
-                ms='4px'
-                color={textColor}
-                fontWeight='bold'
-                fontSize='14px'>
-                1. We requrie responses for a minimum of 5 clips by each participant, but feel free to continue as long as you like!         
-        </Text>
-        
-        <Text
-                mb='4px'
-                ms='4px'
-                color={textColor}
-                fontWeight='bold'
-                fontSize='14px'>
-                2. Feel free to leave any question that you don't want to answer       
-        </Text>
-        
+  
 			<> 
 				<FormControl padding="15px">
                 <FormLabel

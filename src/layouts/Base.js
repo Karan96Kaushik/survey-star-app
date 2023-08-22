@@ -1,6 +1,6 @@
 // chakra imports
 import { Box, ChakraProvider, Portal } from "@chakra-ui/react";
-import Footer from "components/Footer/Footer.js";
+// import Footer from "components/Footer/Footer.js";
 // core components
 import AuthNavbar from "components/Navbars/AuthNavbar.js";
 import React from "react";

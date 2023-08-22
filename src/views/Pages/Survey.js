@@ -7,7 +7,7 @@ import {
 	useToast,
 } from "@chakra-ui/react";
 
-// import CenteredAlert from "components/CenteredAlert/CenteredAlert";
+import CenteredModal from "components/CenteredModal/CenteredModal";
 import Questions from "components/Questions/Questions";
 import Intro from "components/Questions/Intro";
 import Done from "components/Questions/Done";
@@ -22,7 +22,9 @@ const elements = [
 
 function Survey() {
 	
-	const [values, setValues] = React.useState({})
+	const namePrev = localStorage.getItem("userName")
+
+	const [values, setValues] = React.useState({name: namePrev?.length ? namePrev : undefined})
 	const [userID, setUID] = React.useState({})
 	const [name, setName] = React.useState()
 	const [count, setCount] = React.useState(0)
@@ -59,14 +61,14 @@ function Survey() {
 
 	}, []);
 
-	useEffect(() => {
-		if (isOpen) {
-			const timer = setTimeout(() => {
-				onClose();
-			}, 1000); 
-			return () => clearTimeout(timer)
-		}
-	}, [isOpen, onClose]);
+	// useEffect(() => {
+	// 	if (isOpen) {
+	// 		const timer = setTimeout(() => {
+	// 			onClose();
+	// 		}, 1000); 
+	// 		return () => clearTimeout(timer)
+	// 	}
+	// }, [isOpen, onClose]);
 	
 	const handleSave = async () => {
 		try {
@@ -77,7 +79,7 @@ function Survey() {
 
 			if (values.name) {
 				localStorage.setItem("userName", values.name)
-				setName(values.name)
+				// setName(values.name)
 
 				const searchParams = new URLSearchParams(window.location.href.split('?')[1]);
 
@@ -131,6 +133,11 @@ function Survey() {
 				body: JSON.stringify({ ...values, uuid: userID, ...obj, })  // Convert the data to a JSON string
 			})
 			setCount(count+1)
+
+			if (values.name) {
+				setName(values.name)
+				onOpen()
+			}
 			
 			res = await (await fetch( '/api/question')).json()
 
@@ -142,8 +149,6 @@ function Survey() {
 				top: 0,
 				behavior: "smooth"
 			  });
-
-			
 		}
 		catch (err) {
 			console.debug(err)
@@ -162,7 +167,7 @@ function Survey() {
 
 	const handleChange = (id) => (value) => {
 		try {
-			console.debug(id, value)
+			// console.debug(id, value)
 			setValues({
 				...values,
 				[id]: value
@@ -177,7 +182,7 @@ function Survey() {
 		<Flex position='center'>
 		<Flex
 		minH='100vh'
-		h={{ base: "120vh", lg: "fit-content" }}
+		h={{ base: "fit-content", lg: "fit-content" }}
 		w='100%'
 		maxW='1044px'
 		mx='auto'
@@ -211,7 +216,7 @@ function Survey() {
 	{ !done && name?.length && <Questions elements={elements} handleChange={handleChange} values={values} setValues={setValues} audioString={audio} count={count} setDone={setDone} /> }
 	{ done && <Done elements={elements} handleChange={handleChange} values={values} setValues={setValues} audioString={audio} count={count} done={done} /> }
 
-	{/* <CenteredAlert text={'Try another one...'} isOpen={isOpen} onOpen={onOpen} onClose={onClose} /> */}
+	<CenteredModal text={'Try another one...'} isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
 	
 	</>
 	
