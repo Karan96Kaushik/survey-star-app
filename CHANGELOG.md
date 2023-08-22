@@ -1,1 +1,0 @@
-# Survey Star app
