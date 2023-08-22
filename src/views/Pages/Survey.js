@@ -33,18 +33,20 @@ function Survey() {
 
 	const { isOpen, onOpen, onClose } = useDisclosure()
 	
-	useEffect(async () => {
+	useEffect(() => {
 		try {
 			let userID = localStorage.getItem("userID")
 
-			if(!userID) {
-				userID = (Math.random() + 1).toString(36).substring(15);
+			if(!userID?.length) {
+
+				userID = ((Math.random() + 1)*1000).toString(36);
 				localStorage.setItem("userID", userID)
 			}
 			
 			setUID(userID)
 		}
 		catch (err) {
+			console.error(err)
 			toast({
 				title: 'Error Connecting',
 				description: "Please try again later",
@@ -72,6 +74,7 @@ function Survey() {
 			let obj = {}
 
 			setDisabled(true)
+
 			if (values.name) {
 				localStorage.setItem("userName", values.name)
 				setName(values.name)
@@ -88,7 +91,7 @@ function Survey() {
 					isClosable: true,
 				})
 			}
-			else if (values.feedback) {
+			else if (done == 1) {
 				toast({
 					title: "Thanks",
 					// description: "Let's try another clip",
@@ -98,6 +101,16 @@ function Survey() {
 				})
 				setDone(2)
 			} 
+			else if (!name && !values.name) {
+				setDisabled(false)
+				return toast({
+					title: 'Error',
+					description: "Please enter your name",
+					status: 'error',
+					duration: 5000,
+					isClosable: true,
+				})
+			}
 			else {
 				toast({
 					title: 'Saved',
@@ -148,11 +161,16 @@ function Survey() {
 	// console.debug(values)
 
 	const handleChange = (id) => (value) => {
-		console.debug(id, value)
-		setValues({
-			...values,
-			[id]: value
-		})
+		try {
+			console.debug(id, value)
+			setValues({
+				...values,
+				[id]: value
+			})
+		}
+		catch (err) {
+			console.error(err)
+		}
 	}
 
 	return (
